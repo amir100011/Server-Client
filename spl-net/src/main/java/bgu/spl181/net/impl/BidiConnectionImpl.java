@@ -6,8 +6,8 @@ import java.util.LinkedList;
 
 public class BidiConnectionImpl implements BidiMessagingProtocol{
 
-    private ConnectionImpl connections = null;
-    private int connectionId = -1;
+    protected ConnectionImpl connections = null;
+    protected int connectionId = -1;
 
 
     public static LinkedList<String> BreakIntoWords(String msg){
@@ -79,11 +79,11 @@ public class BidiConnectionImpl implements BidiMessagingProtocol{
                 String ACK = "ACK signout succeeded";
 
 
-                boolean Good2Go = this.connections.SignoutCondCheck(Msg, this.connectionId);
+                boolean Good2Go = this.connections.SignoutCondCheck(this.connectionId);
 
                 if (Good2Go) {
                     this.connections.send(this.connectionId, ACK);
-                    this.connections.disconnect(this.connectionId);
+                    this.connections.disconnect(this.connectionId,(String)(this.connections.getLoggedInClients().get(this.connectionId)));
                 }//end of if
                 else
                     this.connections.send(this.connectionId, Error);
@@ -91,7 +91,9 @@ public class BidiConnectionImpl implements BidiMessagingProtocol{
 
             case "REQUEST":
             {
-                requestSystem(Msg);
+                Msg.removeFirst();
+                RequestSystem req = new RequestSystem(Msg,this.connections,this.connectionId);
+                req.requestSystem();
 
             }
            default: break;
@@ -99,9 +101,6 @@ public class BidiConnectionImpl implements BidiMessagingProtocol{
        }
     }
 
-    public void requestSystem(LinkedList<String> message) {
-
-    }
 
     /**
      * @return true if the connection should be terminated

@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class ConnectionImpl<T> implements Connections {
 
     private ConcurrentHashMap<Integer, ConnectionHandler> connectionsDataBase = new ConcurrentHashMap<>();//All clients
-    private ConcurrentHashMap<Integer, Boolean> ConncectedIdConnections = new ConcurrentHashMap<>();//logged in connectionId
-    private ConcurrentSkipListSet<String> loggedInClients = new ConcurrentSkipListSet<>();//loggedIn Clients by userName And PassWord
+    private ConcurrentHashMap<String, UserInfo> UserInfo = new ConcurrentHashMap<>();//logged in connectionId
+    private ConcurrentHashMap<Integer, String> loggedInClients = new ConcurrentHashMap<>();//loggedIn Clients by userName And PassWord
     private ConcurrentHashMap<String, String> UserNameAndPassword = new ConcurrentHashMap<>();//All existing users and their passwords
 
     @Override
@@ -40,17 +40,16 @@ public class ConnectionImpl<T> implements Connections {
     }
 
     @Override
-    public void disconnect(int connectionId) {
+    public void disconnect(int connectionId,String UserName) {
 
-        boolean exists = this.connectionsDataBase.contains(connectionId);
-        boolean connected = this.ConncectedIdConnections.contains(connectionId);
+        boolean exists = this.connectionsDataBase.containsKey(connectionId);
 
-        if (exists && connected) {
+        if (exists) {
             ConnectionHandler disconnect = this.connectionsDataBase.get(connectionId);
             try {
                 disconnect.close();
-                ConncectedIdConnections.remove(connectionId);
                 connectionsDataBase.remove(connectionId);
+                loggedInClients.remove(connectionId,UserName);
             } catch (IOException ignored) {
                 ignored.printStackTrace();//TODO delete before submitting
             }
@@ -61,7 +60,6 @@ public class ConnectionImpl<T> implements Connections {
     public boolean AddConnection(int connectionId, ConnectionHandler handler) {
         if (!this.connectionsDataBase.contains(connectionId)) {
             this.connectionsDataBase.put(connectionId, handler);
-            this.ConncectedIdConnections.put(connectionId, false);
         }
         return this.connectionsDataBase.contains(connectionId);//true - added/exists false not exists
     }
@@ -70,11 +68,11 @@ public class ConnectionImpl<T> implements Connections {
         return this.connectionsDataBase;
     }
 
-    public ConcurrentHashMap getConncectedIdConnections() {
-        return this.ConncectedIdConnections;
+    public ConcurrentHashMap getUserInfo() {
+        return this.UserInfo;
     }
 
-    public ConcurrentSkipListSet<String> getLoggedInClients() {
+    public ConcurrentHashMap getLoggedInClients() {
         return this.loggedInClients;
     }
 
@@ -82,9 +80,6 @@ public class ConnectionImpl<T> implements Connections {
         return this.UserNameAndPassword;
     }
 
-    public boolean CheckifLoggedIn(int Connectionid) {
-        return this.ConncectedIdConnections.get(Connectionid);
-    }
 
     public boolean RegisterCondCheck(LinkedList<String> Msg, Integer connectionId) {
 
@@ -95,14 +90,26 @@ public class ConnectionImpl<T> implements Connections {
             String UserName = Msg.get(1);
             String Password = Msg.get(2);
 
-            if (this.CheckifLoggedIn(connectionId))
+            if (this.loggedInClients.containsKey(connectionId))
                 return false;
             if (this.UserNameAndPassword.containsKey(UserName))//UserName Taken(2)
                 return false;
 
             else {//passed all tests
+
+                if(Msg.size() > 2) { //Adding user info if he has //TODO check if it can have less parameters than needed
+                    List<String> moviesList = new LinkedList<>();
+                    for (int index = 6; index < Msg.size(); index++)
+                        moviesList.add(Msg.get(index));
+                    boolean type = Msg.get(3).equals("Admin");
+                    String countery = Msg.get(4);
+                    Integer balance = Integer.parseInt(Msg.get(5));
+                    UserInfo user =  new UserInfo(type, countery, balance, moviesList);
+                    this.UserInfo.put(UserName,user);
+                }//end of Addition
+
+
                 this.UserNameAndPassword.put(UserName, Password);//new userName and Password
-                this.ConncectedIdConnections.put(connectionId, false);
                 return true;
             }//end of else
         }//end of else
@@ -114,32 +121,24 @@ public class ConnectionImpl<T> implements Connections {
         String Password = Msg.get(2);
 
 
-        if (this.CheckifLoggedIn(connectionId))//if this client is already logged in
+        if (this.loggedInClients.containsKey(connectionId))//if this client is already logged in
             return false;
         if (!this.UserNameAndPassword.containsKey(UserName))
             return false;//no UserName with that name exists
         if (!this.UserNameAndPassword.get(UserName).equals(Password))//UserName and Password do not match(3)
             return false;
-        if (this.loggedInClients.contains(UserName))//UserName already logged in(2)
+        if (this.loggedInClients.containsValue(UserName))//UserName already logged in(2)
             return false;
         else {//passed all tests
-            this.loggedInClients.add(UserName);//added the user to logged in users
-            this.ConncectedIdConnections.replace(connectionId, true);
+            this.loggedInClients.put(connectionId,UserName);//added the user to logged in users
             return true;
         }//end of else
     }//end of function
 
 
-    public boolean SignoutCondCheck(LinkedList<String> Msg, Integer connectionId) {
+    public boolean SignoutCondCheck(Integer connectionId) {
 
-        String UserName = Msg.get(1);
-        String Password = Msg.get(2);
+            return this.loggedInClients.get(connectionId) != null;
 
-
-        if(this.ConncectedIdConnections.contains(connectionId))//Client not logged in (1)
-            return false;
-        else{
-            return true;
-        }
     }//end of function
 }

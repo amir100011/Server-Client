@@ -11,7 +11,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class NonBlockingConnectionHandler<T> implements ConnectionHandler {
+public class NonBlockingConnectionHandler<T> implements ConnectionHandler<T> {
 
 
     private static final int BUFFER_ALLOCATION_SIZE = 1 << 13; //8k
@@ -120,7 +120,7 @@ public class NonBlockingConnectionHandler<T> implements ConnectionHandler {
 
 
     @Override
-    public void send(Object msg) {
+    public void send(T msg) {
 
     }
 }
