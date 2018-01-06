@@ -5,6 +5,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+//Signle User
+
 public class UserInfo {
 
     private AtomicBoolean isAdmine = new AtomicBoolean(false);

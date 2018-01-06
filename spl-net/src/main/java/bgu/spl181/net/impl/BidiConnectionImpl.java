@@ -9,7 +9,6 @@ public class BidiConnectionImpl implements BidiMessagingProtocol{
     protected ConnectionImpl connections = null;
     protected int connectionId = -1;
 
-
     public static LinkedList<String> BreakIntoWords(String msg){
 
         LinkedList<String> Msg = new LinkedList<>();
@@ -30,6 +29,7 @@ public class BidiConnectionImpl implements BidiMessagingProtocol{
         this.connections = connections;
         this.connections.AddConnection(connectionId, handler);
         this.connectionId = connectionId;
+
     }
 
     @Override

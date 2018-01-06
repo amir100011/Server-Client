@@ -1,23 +1,21 @@
 package bgu.spl181.net.impl;
 
 import bgu.spl181.net.api.bidi.Connections;
-import bgu.spl181.net.srv.BlockingConnectionHandler;
 import bgu.spl181.net.srv.bidi.ConnectionHandler;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 
-public class ConnectionImpl<T> implements Connections {
+public class ConnectionImpl<T> implements Connections, JasonHandler{
 
     private ConcurrentHashMap<Integer, ConnectionHandler> connectionsDataBase = new ConcurrentHashMap<>();//All clients
     private ConcurrentHashMap<String, UserInfo> UserInfo = new ConcurrentHashMap<>();//logged in connectionId
     private ConcurrentHashMap<Integer, String> loggedInClients = new ConcurrentHashMap<>();//loggedIn Clients by userName And PassWord
     private ConcurrentHashMap<String, String> UserNameAndPassword = new ConcurrentHashMap<>();//All existing users and their passwords
+    private BlockbusterInfo MovieInfo;//All existing users and their passwords
+
 
     @Override
     public boolean send(int connectionId, Object msg) {
@@ -80,6 +78,9 @@ public class ConnectionImpl<T> implements Connections {
         return this.UserNameAndPassword;
     }
 
+    public BlockbusterInfo getMovieInfo() {
+        return MovieInfo;
+    }
 
     public boolean RegisterCondCheck(LinkedList<String> Msg, Integer connectionId) {
 
@@ -141,4 +142,14 @@ public class ConnectionImpl<T> implements Connections {
             return this.loggedInClients.get(connectionId) != null;
 
     }//end of function
+
+    @Override
+    public void updateUserInfo(UserInfo userToUpdate) {
+
+    }
+
+    @Override
+    public void updateMovieInfo(BlockbusterInfo movieToUpdate) {
+
+    }
 }
