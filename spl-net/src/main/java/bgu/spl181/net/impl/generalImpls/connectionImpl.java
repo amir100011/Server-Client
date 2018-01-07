@@ -1,6 +1,7 @@
 package bgu.spl181.net.impl.generalImpls;
 
 import bgu.spl181.net.api.bidi.Connections;
+import bgu.spl181.net.impl.Json.JsonMovie;
 import bgu.spl181.net.impl.Json.JsonUser;
 import bgu.spl181.net.srv.bidi.ConnectionHandler;
 
@@ -13,6 +14,7 @@ public class connectionImpl<T> implements Connections {
     private ConcurrentHashMap<Integer, ConnectionHandler> clientsDataBase = new ConcurrentHashMap<>();//All clients
     private ConcurrentHashMap<Integer, String> loggedInClients = new ConcurrentHashMap<>();//All clients
     private JsonUser userDataBase;
+    private JsonMovie movieDataBase;
 
     @Override
     public boolean send(int connectionId, Object msg) {
@@ -61,13 +63,13 @@ public class connectionImpl<T> implements Connections {
     }
 
     public boolean isLoggedIn(int conId, String UserName) {
-        return !this.loggedInClients.containsKey(conId) && !this.loggedInClients.containsValue(UserName);
+        return this.loggedInClients.containsKey(conId) || this.loggedInClients.containsValue(UserName);
     }
 
     public boolean isLoggedIn(int conId) {
-        return !this.loggedInClients.containsKey(conId);
+        return this.loggedInClients.containsKey(conId);
     }
-    public void SetJson(JsonUser userDataBase){
+    public void SetJson(JsonUser userDataBase, JsonMovie movieDataBase){
         this.userDataBase = userDataBase;//TODO Insert JsonMovies
     }
 
@@ -75,7 +77,15 @@ public class connectionImpl<T> implements Connections {
         return userDataBase;
     }
 
+    public JsonMovie getMovieDataBase() {
+        return movieDataBase;
+    }
+
     public ConcurrentHashMap<Integer, String> getLoggedInClients() {
         return loggedInClients;
+    }
+
+    public ConcurrentHashMap<Integer, ConnectionHandler> getClientsDataBase() {
+        return clientsDataBase;
     }
 }

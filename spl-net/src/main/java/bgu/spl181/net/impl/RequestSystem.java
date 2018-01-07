@@ -4,7 +4,6 @@ import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.impl.generalImpls.connectionImpl;
 
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class RequestSystem extends BidiConnectionImple {
 
@@ -23,31 +22,35 @@ public class RequestSystem extends BidiConnectionImple {
 
         String reqKind = this.Msg.get(0);
 
-/*
+
         switch (reqKind) {
 
-            case "balance":
+            case "balance": {
                 reqKind = this.Msg.get(1);
                 String ACK;
-                AtomicInteger balance = new AtomicInteger(0);
-                String UserName = ((String)this.connections.getLoggedInClients().get(connectionId));
+                int balance;
+                String userName = ((String) this.connections.getLoggedInClients().get(connectionId));
                 if (reqKind.equals("info")) {
-                    balance.set(((UserInfo)this.connections.getUserInfo().get(UserName)).getBalance().get());
-                    ACK = "ACK " + balance.toString();
+                    balance = this.connections.getUserDataBase().GetUser(userName).getBalance();
+                    ACK = "ACK " + balance;
                 }//end of ("info") if
-                else{//"add"
-                    balance = ((UserInfo)this.connections.getUserInfo().get(UserName)).getBalance();
+                else {//"add"
                     Integer Amount = Integer.parseInt(Msg.get(2));
-                    int newBalance = balance.get() + Amount;
-                    ((UserInfo)this.connections.getUserInfo().get(UserName)).setBalance(newBalance);
-                    ACK ="ACK " + newBalance + " add " + Amount.toString();
+                    this.connections.getUserDataBase().addToBalance(userName, Amount);
+                    balance = this.connections.getUserDataBase().GetUser(userName).getBalance();
+                    ACK = "ACK " + balance + " add " + Amount.toString();
                 }//end of "add" (else)
 
-                this.connections.send(this.connectionId,ACK);
-
+                this.connections.send(this.connectionId, ACK);
 
                 break;
+            }
+            case "info":{
+                if (Msg.size()>1) {//we have movie name
+                    boolean Good2GO = this.connections.getMovieDataBase().hasMovie();
+                }
+            }
         }//end of switch-case
-        */
+
     }//end of function
 }

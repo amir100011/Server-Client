@@ -47,15 +47,7 @@
       "password": "123",
       "type": "normal",
       "country": "Israel",
-      "balance": 0,
-      "movies": []
-    },
-    {
-      "username": "dor",
-      "password": "123",
-      "type": "normal",
-      "country": "Israel",
-      "balance": 0,
+      "balance": 50,
       "movies": []
     }
   ]

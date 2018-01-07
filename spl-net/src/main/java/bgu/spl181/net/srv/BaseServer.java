@@ -2,6 +2,7 @@ package bgu.spl181.net.srv;
 
 import bgu.spl181.net.api.MessageEncoderDecoder;
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl181.net.impl.Json.JsonMovie;
 import bgu.spl181.net.impl.Json.JsonUser;
 import bgu.spl181.net.impl.generalImpls.connectionImpl;
 
@@ -19,6 +20,7 @@ public abstract class BaseServer<T> implements Server<T> {
     private connectionImpl connections = new connectionImpl();
     private int Counter = 0;
     private JsonUser userDataBase;
+    private JsonMovie movieDataBase;
 
     public BaseServer(
             int port,
@@ -66,8 +68,9 @@ public abstract class BaseServer<T> implements Server<T> {
 
     protected abstract void execute(BlockingConnectionHandler<T>  handler);
 
-    public void setJson(JsonUser X){
-        this.userDataBase = X;//TODO Insert JsonMovies
-        this.connections.SetJson(X);
+    public void setJson(JsonUser X, JsonMovie Y){
+        this.userDataBase = X;
+        this.movieDataBase = Y;
+        this.connections.SetJson(X,Y);
     }
 }

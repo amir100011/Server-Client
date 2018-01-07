@@ -41,8 +41,13 @@ public class UserInfo {
         return country;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void addToBalance(int balance) {
+        this.balance += balance;
+    }
+
+    public void decFromBalance(int balance) {
+        if(this.balance > balance)
+            this.balance -= balance;
     }
 
     public boolean AddMovies(RentedMovie movie) {

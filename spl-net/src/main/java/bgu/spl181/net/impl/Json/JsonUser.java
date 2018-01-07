@@ -73,4 +73,19 @@ private boolean WriteJson(){
         return false;
 
     }
+
+    public void addToBalance(String userName,int addMoney){
+        if(HasUser(userName)){
+            GetUser(userName).addToBalance(addMoney);
+            WriteJson();
+        }
+    }
+
+    public void decFromBalance(String userName,int decMoney){
+        if(HasUser(userName)){
+            GetUser(userName).decFromBalance(decMoney);
+            WriteJson();
+        }
+    }
+
 }

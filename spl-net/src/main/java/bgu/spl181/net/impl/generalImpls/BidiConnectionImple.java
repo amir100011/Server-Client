@@ -1,7 +1,7 @@
 package bgu.spl181.net.impl.generalImpls;
 
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
-import bgu.spl181.net.impl.Json.JsonUser;
+import bgu.spl181.net.impl.RequestSystem;
 import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.srv.bidi.ConnectionHandler;
 
@@ -55,7 +55,7 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                 String password = Msg.get(2);
 
                 boolean Good2Go = !this.connections.getUserDataBase().HasUser(userName);//if not exist returns false
-                Good2Go = Good2Go && this.connections.isLoggedIn(connectionId);
+                Good2Go = Good2Go && !this.connections.isLoggedIn(connectionId);
 
                     String Country = Msg.get(3);//country="Country" <---need the "    "  statement only
                     Good2Go = Good2Go && Country.contains("country=");//if Register Command holds "country=" as instructed
@@ -82,7 +82,7 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                     String password = Msg.get(2);
 
                     boolean Good2Go = this.connections.getUserDataBase().HasUser(userName);//if not exist returns false
-                    Good2Go = Good2Go && this.connections.isLoggedIn(connectionId,userName);//the username or the client already logged in
+                    Good2Go = Good2Go && !this.connections.isLoggedIn(connectionId,userName);//the username or the client already logged in
                     Good2Go = Good2Go && this.connections.getUserDataBase().matchedUserPassword(userName,password);//wrong password
                     if (Good2Go) {
                         this.connections.getLoggedInClients().put(this.connectionId,userName);
@@ -92,9 +92,35 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                 }
                 this.connections.send(this.connectionId, Error);
                 break;
+            }
+            case "SIGNOUT":{
 
+                String Error = "Error Signout failed";
+                String ACK = "ACK Signout succeeded";
+
+                boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
+                if (Good2Go){
+                    this.connections.send(this.connectionId, ACK);
+                    this.connections.getLoggedInClients().remove(this.connectionId);
+                    this.connections.getClientsDataBase().remove(this.connectionId);
+                    break;
+                }
+                this.connections.send(this.connectionId, Error);
+                break;
             }
 
+            case "REQUEST":{
+
+                boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
+                if (Good2Go) {
+                    Msg.removeFirst();//remove the Request word
+                    RequestSystem tmp = new RequestSystem(Msg, this.connections, this.connectionId);
+                    tmp.requestSystem();
+                    break;
+                }
+            }
+            default:
+                break;
         }
     }
 
