@@ -1,13 +1,13 @@
 package bgu.spl181.net.impl.Blockbuster;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class represents all the movies in our system
  */
 public class movieCollection {
 
-    private LinkedList<singleMovieInfo> movies = new LinkedList<>();
+    private List<singleMovieInfo> movies;
 
     public void addRemoveMovie(singleMovieInfo movie){
 

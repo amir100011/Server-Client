@@ -2,7 +2,8 @@ package bgu.spl181.net.srv;
 
 import bgu.spl181.net.api.MessageEncoderDecoder;
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
-import bgu.spl181.net.impl.ConnectionImpl;
+import bgu.spl181.net.impl.Json.JsonUser;
+import bgu.spl181.net.impl.generalImpls.connectionImpl;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,8 +16,9 @@ public abstract class BaseServer<T> implements Server<T> {
     private final Supplier<BidiMessagingProtocol<T>> protocolFactory;
     private final Supplier<MessageEncoderDecoder<T>> encdecFactory;
     private ServerSocket sock;
-    private ConnectionImpl connections = new ConnectionImpl();
+    private connectionImpl connections = new connectionImpl();
     private int Counter = 0;
+    private JsonUser userDataBase;
 
     public BaseServer(
             int port,
@@ -64,4 +66,8 @@ public abstract class BaseServer<T> implements Server<T> {
 
     protected abstract void execute(BlockingConnectionHandler<T>  handler);
 
+    public void setJson(JsonUser X){
+        this.userDataBase = X;//TODO Insert JsonMovies
+        this.connections.SetJson(X);
+    }
 }

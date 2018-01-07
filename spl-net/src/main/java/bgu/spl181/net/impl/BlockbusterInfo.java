@@ -1,16 +1,16 @@
 package bgu.spl181.net.impl;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-public class BlockbusterInfo {
+public class BlockbusterInfo {//TODO use Movie Class to hold info on each movie and this class will manage the blockbuster
 
-    private ConcurrentHashMap<String,Integer> copiesLeft = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String,Integer> totalCopies = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String,Integer> prices = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String,ConcurrentSkipListSet<String>> BannedCountries = new ConcurrentHashMap<>();
-
+    private ConcurrentHashMap<String,Integer> copiesLeft;
+    private ConcurrentHashMap<String,Integer> totalCopies;
+    private ConcurrentHashMap<String,Integer> prices;
+    private ConcurrentHashMap<String,ConcurrentSkipListSet<String>> BannedCountries;
 
     public BlockbusterInfo(String[] movieName, int[] price, int[] copiesLeft, int[] totalCopies, List<String>[] bannedCountries){
         ConcurrentSkipListSet<String> tmp = new ConcurrentSkipListSet<>();
