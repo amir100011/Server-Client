@@ -5,7 +5,7 @@
       "password": "potato",
       "type": "admin",
       "country": "united states",
-      "balance": 0,
+      "balance": "0",
       "movies": []
     },
     {
@@ -13,14 +13,14 @@
       "password": "chips123",
       "type": "normal",
       "country": "spain",
-      "balance": 37,
+      "balance": "37",
       "movies": [
         {
-          "id": 2,
+          "id": "2",
           "name": "The Pursuit Of Happyness"
         },
         {
-          "id": 3,
+          "id": "3",
           "name": "The Notebook"
         }
       ]
@@ -30,14 +30,14 @@
       "password": "cocacola",
       "type": "normal",
       "country": "israel",
-      "balance": 112,
+      "balance": "112",
       "movies": [
         {
-          "id": 1,
+          "id": "1",
           "name": "The Godfather"
         },
         {
-          "id": 2,
+          "id": "2",
           "name": "The Pursuit Of Happyness"
         }
       ]
@@ -47,7 +47,7 @@
       "password": "123",
       "type": "normal",
       "country": "Israel",
-      "balance": 50,
+      "balance": "50",
       "movies": []
     }
   ]

@@ -12,7 +12,15 @@ public class Movies {
 
     public void addMovie(singleMovieInfo newMovie){ movies.add((newMovie)); }
 
-    public boolean HasMovie(String movieName){ return movies.contains(movieName); }
+    public boolean HasMovie(String movieName){
+
+        for (int index = 0; index < movies.size(); index++){
+            if(movies.get(index).getName().equals(movieName))
+                return true;
+        }
+
+        return false;
+    }
 
     /**
      * @param movieName
@@ -20,11 +28,13 @@ public class Movies {
      */
     public singleMovieInfo getSpecificMovie(String movieName){
         for (singleMovieInfo movieToReturn: this.movies) {
-            if(movieToReturn.getMovieName().equals(movieName));
+            if(movieToReturn.getName().equals(movieName));
             return movieToReturn;
         }
         return null;
     }
 
-
+    public List<singleMovieInfo> getMovies() {
+        return movies;
+    }
 }

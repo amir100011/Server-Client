@@ -70,7 +70,8 @@ public class connectionImpl<T> implements Connections {
         return this.loggedInClients.containsKey(conId);
     }
     public void SetJson(JsonUser userDataBase, JsonMovie movieDataBase){
-        this.userDataBase = userDataBase;//TODO Insert JsonMovies
+        this.userDataBase = userDataBase;
+        this.movieDataBase = movieDataBase;
     }
 
     public JsonUser getUserDataBase() {

@@ -13,7 +13,7 @@ public class JsonUser {
 private Users users = new Users();//Need this to Write to Json\
 private ReadWriteLock Lock = new ReentrantReadWriteLock();
 private String path;
-private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+private Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class,(JsonSerializer<Integer>)(intger,type,JsonSerializationContext)->new JsonPrimitive(intger.toString())).setPrettyPrinting().create();
 private JsonObject jsondoc;
 
 public JsonUser(String path){

@@ -11,7 +11,7 @@ public class movieCollection {
 
     public void addRemoveMovie(singleMovieInfo movie){
 
-        if(hasMovie(movie.getMovieName()))
+        if(hasMovie(movie.getName()))
             this.movies.remove(movie);
         else
             this.movies.add(movie);
@@ -20,7 +20,7 @@ public class movieCollection {
     public boolean hasMovie(String movie){
 
         for (singleMovieInfo movieToCompare: this.movies) {
-            if (movieToCompare.getMovieName().equals(movie))
+            if (movieToCompare.getName().equals(movie))
                 return true;
         }
         return false;
@@ -35,7 +35,7 @@ public class movieCollection {
 
         if (hasMovie(movieName)) {
             for (singleMovieInfo movieToCompare : this.movies) {
-                if (movieToCompare.getMovieName().equals(movieName))
+                if (movieToCompare.getName().equals(movieName))
                     return movieToCompare;
             }//end of for
         }//end of if

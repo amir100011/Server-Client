@@ -1,5 +1,6 @@
 import bgu.spl181.net.api.MessageEncoderDecoder;
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
+import bgu.spl181.net.impl.Json.JsonMovie;
 import bgu.spl181.net.impl.Json.JsonUser;
 import bgu.spl181.net.impl.Users.RentedMovie;
 import bgu.spl181.net.impl.Users.UserInfo;
@@ -14,8 +15,10 @@ import java.util.function.Supplier;
 public class Test {
 
     public static void main(String[] args){
-        String path = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Users.json";
-        JsonUser JsonUsers = new JsonUser(path);
+        String pathUsers = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Users.json";
+        String pathMovies = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Movies.json";
+        JsonUser JsonUsers = new JsonUser(pathUsers);
+        JsonMovie jsonMovies = new JsonMovie(pathMovies);
         Supplier<MessageEncoderDecoder<String>> encdec = new Supplier<MessageEncoderDecoder<String>>() {
             @Override
             public MessageEncoderDecoder<String> get() {
@@ -29,7 +32,7 @@ public class Test {
             }
         };
         Server<String> server = Server.threadPerClient(7777, ProtocolSupplier, encdec);
-        ((BaseServer)server).setJson(JsonUsers);
+        ((BaseServer)server).setJson(JsonUsers, jsonMovies);
         server.serve();
 
 

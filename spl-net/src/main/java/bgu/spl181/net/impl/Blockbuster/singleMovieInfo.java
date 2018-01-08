@@ -6,39 +6,39 @@ package bgu.spl181.net.impl.Blockbuster;
  */
 public class singleMovieInfo {
 
-    private int Id;
-    private String movieName;
-    private int totalCopies;
-    private int copiesLeft;
+    private int id;
+    private String name;
+    private int totalAmount;
+    private int availableAmount;
     private int price;
     private String[] bannedCountries;
 
     public singleMovieInfo(int id, String name, int totalCopies, int price, String[] bannedCountries){
         this.bannedCountries = bannedCountries;
-        this.copiesLeft = totalCopies;
-        this.totalCopies = totalCopies;
+        this.availableAmount = totalCopies;
+        this.totalAmount = totalCopies;
         this.price = price;
-        this.Id = id;
-        this.movieName = name;
+        this.id = id;
+        this.name = name;
     }
 
-    public int getCopiesLeft() { return copiesLeft; }
+    public int getAvailableAmount() { return availableAmount; }
 
-    public int getId() { return Id; }
+    public int getId() { return id; }
 
     public int getPrice() { return price; }
 
-    public int getTotalCopies() { return totalCopies; }
+    public int getTotalAmount() { return totalAmount; }
 
-    public String getMovieName() { return movieName; }
+    public String getName() { return name; }
 
     public String[] getBannedCountries() { return bannedCountries; }
 
     public void setPrice(int price) { this.price = price; }
 
-    public void addCopie(){ this.copiesLeft++; }
+    public void addCopie(){ this.availableAmount++; }
 
-    public void rentMocie(){ this.copiesLeft--; }
+    public void rentMocie(){ this.availableAmount--; }
 
     public boolean isBanned(String userCountry){
 
