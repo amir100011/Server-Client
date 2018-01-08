@@ -46,12 +46,16 @@ public class JsonMovie {
      * updates the movies of the system
      */
     private void updateMovies() {
+        this.Lock.readLock().lock();
         try (Reader Reader = new FileReader(path)) {
             movies = gson.fromJson(Reader, movies.getClass());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            this.Lock.readLock().unlock();
         }
     }
 
@@ -94,10 +98,16 @@ public class JsonMovie {
         updateMovies();
         String tmp = "";
         for (int index = 0; index < movies.getMovies().size(); index++) {
-            tmp = tmp.concat(", " + movies.getMovies().get(index).getName());
+            tmp = tmp.concat(", \"" + movies.getMovies().get(index).getName()+ "\"");
         }
 
         return tmp;
+    }
+
+    public void BlockMovies(Runnable task){
+        this.Lock.writeLock().lock();
+        task.run();
+        this.Lock.writeLock().unlock();
     }
 }
 

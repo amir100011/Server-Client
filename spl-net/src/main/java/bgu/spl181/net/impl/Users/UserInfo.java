@@ -60,14 +60,19 @@ public class UserInfo {
 
     }
 
-    public boolean RemMovies(int id) {
+    public void RemMovies(String movieName) {
         for (RentedMovie movie : movies) {
-            if(movie.getId() == id){
+            if(movie.getMovieName().equals(movieName)){
                 movies.remove(movie);
-                return true;
             }
         }
-        return false;
     }
 
+    public boolean alreadyRented(String movieName){
+        for (RentedMovie movie: this.movies) {
+            if(movie.getMovieName().equals(movieName))
+                return true;
+            }
+            return false;
+    }
 }

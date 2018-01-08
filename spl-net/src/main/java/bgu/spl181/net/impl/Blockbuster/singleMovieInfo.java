@@ -36,9 +36,9 @@ public class singleMovieInfo {
 
     public void setPrice(int price) { this.price = price; }
 
-    public void addCopie(){ this.availableAmount++; }
+    public void addCopy(){ this.availableAmount++; }
 
-    public void rentMocie(){ this.availableAmount--; }
+    public void rentMovie(){ this.availableAmount--; }
 
     public boolean isBanned(String userCountry){
 

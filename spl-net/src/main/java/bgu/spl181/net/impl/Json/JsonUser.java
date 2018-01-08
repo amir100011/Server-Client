@@ -6,6 +6,7 @@ import bgu.spl181.net.impl.Users.Users;
 import com.google.gson.*;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 

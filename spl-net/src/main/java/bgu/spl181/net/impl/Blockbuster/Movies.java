@@ -15,7 +15,8 @@ public class Movies {
     public boolean HasMovie(String movieName){
 
         for (int index = 0; index < movies.size(); index++){
-            if(movies.get(index).getName().equals(movieName))
+            String curMovieName = movies.get(index).getName();
+            if(curMovieName.equals(movieName))
                 return true;
         }
 
