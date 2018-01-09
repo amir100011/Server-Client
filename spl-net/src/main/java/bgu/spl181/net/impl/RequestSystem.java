@@ -1,6 +1,7 @@
 package bgu.spl181.net.impl;
 
 import bgu.spl181.net.impl.Blockbuster.singleMovieInfo;
+import bgu.spl181.net.impl.Json.JsonMovie;
 import bgu.spl181.net.impl.Users.RentedMovie;
 import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.impl.generalImpls.connectionImpl;
@@ -111,9 +112,9 @@ public class RequestSystem extends BidiConnectionImple {
                     }
                     //if we are here the user is not on the banned list and doesn't have the movie
                     this.connections.getMovieDataBase().BlockMovies(()->{
+                                JsonMovie movieDataBase = this.connections.getMovieDataBase();
                                 //Check if movies exist and has copies left
-                                boolean Good2Go = this.connections.getMovieDataBase().hasMovie(movieName);
-                                Good2Go = Good2Go & this.connections.getMovieDataBase().hasAviliableCopiesLeft(movieName);
+                                boolean Good2Go = this.connections.getMovieDataBase().hasAviliableCopiesLeft(movieName);
                                 ///if the user has sufficient funds
                                 int moviePrice = this.connections.getMovieDataBase().getSpecificMovie(movieName).getPrice();
                                 boolean hasSufficientfunds = this.connections.getUserDataBase().GetUser(userName).getBalance() >= moviePrice ;
@@ -123,7 +124,11 @@ public class RequestSystem extends BidiConnectionImple {
                                 ////then we add the movie to the user
                                 if(Good2Go) {
                                     RentedMovie rentedMovie = this.connections.getMovieDataBase().RentMovie(movieName);
-                                    this.connections.getUserDataBase().GetUser(userName).addMovie(rentedMovie,moviePrice);
+                                    this.connections.getUserDataBase().addMovie(userName,rentedMovie,moviePrice);
+                                    this.connections.send(this.connectionId, "ACK rent"+"\""+movieName +"\""+  "success");
+
+                                    this.connections.broadcast("movie" +parametersConcat(movieDataBase.getSpecificMovie(movieName)));
+
                                 }else
                                     this.connections.send(this.connectionId, "ERROR request rent failed");
                             }
@@ -171,7 +176,7 @@ public class RequestSystem extends BidiConnectionImple {
                                 singleMovieInfo newmovie = new singleMovieInfo(id, movieName, _Copies, Price , bannedCountry);
                                 this.connections.getMovieDataBase().addMovie(newmovie);
                                 this.connections.send(this.connectionId, "ACK addmovie "+"\""+newmovie.getName() +"\"" + "success");
-                                this.connections.broadcast("movie"+parametersConcatForAddMovie(newmovie));
+                                this.connections.broadcast("movie"+parametersConcatForMovie(newmovie));
                             }
                         }
                 );
@@ -202,7 +207,7 @@ public class RequestSystem extends BidiConnectionImple {
         return toReturn;
     }
 
-    private String parametersConcatForAddMovie(singleMovieInfo tmp) {
+    private String parametersConcatForMovie(singleMovieInfo tmp) {
         String toReturn = "";
         toReturn = toReturn.concat("\""+tmp.getName()+"\"");
         toReturn = toReturn.concat(" " + tmp.getAvailableAmount());

@@ -31,12 +31,7 @@
       "type": "normal",
       "country": "israel",
       "balance": "112",
-      "movies": [
-        {
-          "id": "1",
-          "name": "The Godfather"
-        }
-      ]
+      "movies": []
     }
   ]
 }

@@ -29,9 +29,11 @@ public class connectionImpl<T> implements Connections {
     @Override
     public void broadcast(Object msg) {
 
-        Collection<ConnectionHandler> ActiveClients = this.clientsDataBase.values();
-        for (ConnectionHandler activeClient : ActiveClients) {
-            activeClient.send(msg);
+        Collection<Integer> ActiveClients = this.loggedInClients.keySet();
+        ConnectionHandler connectedClient;
+        for (Integer activeClient : ActiveClients) {
+            connectedClient = this.getClientsDataBase().get(activeClient);
+            connectedClient.send(msg);
         }
 
     }

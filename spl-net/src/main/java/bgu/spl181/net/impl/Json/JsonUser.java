@@ -97,4 +97,9 @@ private boolean WriteJson(){
         WriteJson();
     }
 
+    public void addMovie(String userName,RentedMovie rentedMovie, int moviePrice) {
+    updateUsers();
+    GetUser(userName).addMovie(rentedMovie,moviePrice);
+    WriteJson();
+    }
 }

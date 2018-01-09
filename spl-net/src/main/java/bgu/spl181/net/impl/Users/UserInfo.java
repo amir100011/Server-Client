@@ -78,7 +78,6 @@ public class UserInfo {
     }
 
     public void addMovie(RentedMovie rentedMovie, int price) {
-
         this.movies.add(rentedMovie);
         decFromBalance(price);
 

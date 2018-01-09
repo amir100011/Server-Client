@@ -7,6 +7,7 @@ import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.impl.echo.LineMessageEncoderDecoder;
 import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.srv.BaseServer;
+import bgu.spl181.net.srv.Reactor;
 import bgu.spl181.net.srv.Server;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import java.util.function.Supplier;
 public class Test {
 
     public static void main(String[] args){
-        String pathUsers = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Users.json";
-        String pathMovies = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Movies.json";
+        String pathUsers = "/home/dor/Desktop/SPL/Ass3/spl-net/example_Users.json";
+        String pathMovies = "/home/dor/Desktop/SPL/Ass3/spl-net/example_Movies.json";
         JsonUser JsonUsers = new JsonUser(pathUsers);
         JsonMovie jsonMovies = new JsonMovie(pathMovies);
         Supplier<MessageEncoderDecoder<String>> encdec = new Supplier<MessageEncoderDecoder<String>>() {
@@ -31,8 +32,8 @@ public class Test {
                 return new BidiConnectionImple();
             }
         };
-        Server<String> server = Server.threadPerClient(7777, ProtocolSupplier, encdec);
-        ((BaseServer)server).setJson(JsonUsers, jsonMovies);
+        Server<String> server = Server.reactor(8,7777, ProtocolSupplier, encdec);
+        ((Reactor)server).setJson(JsonUsers, jsonMovies);
         server.serve();
 
 
