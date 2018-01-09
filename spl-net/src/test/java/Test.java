@@ -16,8 +16,12 @@ import java.util.function.Supplier;
 public class Test {
 
     public static void main(String[] args){
-        String pathUsers = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Movies.json";
-        String pathMovies = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Users.json";
+        String path = System.getProperty("user.dir");
+        String pathUsers = path + "/example_Users.json";
+        String pathMovies = path + "/example_Movies.json";
+
+        //String pathUsers = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Movies.json";
+      //  String pathMovies = "/home/amir/Desktop/Spl/Server-Client-master/spl-net/example_Users.json";
         JsonUser JsonUsers = new JsonUser(pathUsers);
         JsonMovie jsonMovies = new JsonMovie(pathMovies);
         Supplier<MessageEncoderDecoder<String>> encdec = new Supplier<MessageEncoderDecoder<String>>() {
