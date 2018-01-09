@@ -46,4 +46,14 @@ public class Movies {
         movie.rentMovie();//decrement available copies
         return new RentedMovie(movie.getId(), movie.getName());
     }
+
+
+    public int getNewMovieId() {
+        int highestId = 1;
+        for (singleMovieInfo movie: this.movies) {
+            if(highestId < movie.getId())
+                highestId = movie.getId();
+        }
+        return highestId;
+    }
 }

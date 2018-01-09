@@ -3,7 +3,6 @@ package bgu.spl181.net.impl.Json;
 import bgu.spl181.net.impl.Blockbuster.Movies;
 import bgu.spl181.net.impl.Blockbuster.singleMovieInfo;
 import bgu.spl181.net.impl.Users.RentedMovie;
-import bgu.spl181.net.impl.Users.Users;
 import com.google.gson.*;
 
 import java.io.*;
@@ -119,6 +118,12 @@ public class JsonMovie {
         updateMovies();
         this.movies.getSpecificMovie(movieName).addCopy();
         WriteJson();
+    }
+
+
+    public int getNewMovieId() {
+        updateMovies();
+        return this.movies.getNewMovieId();
     }
 }
 
