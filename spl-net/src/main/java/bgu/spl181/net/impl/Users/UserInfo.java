@@ -75,4 +75,12 @@ public class UserInfo {
             }
             return false;
     }
+
+    public void addMovie(RentedMovie rentedMovie, int price) {
+
+        this.movies.add(rentedMovie);
+        decFromBalance(price);
+
+
+    }
 }

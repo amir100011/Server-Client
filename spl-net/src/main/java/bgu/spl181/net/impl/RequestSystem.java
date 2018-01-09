@@ -1,6 +1,7 @@
 package bgu.spl181.net.impl;
 
 import bgu.spl181.net.impl.Blockbuster.singleMovieInfo;
+import bgu.spl181.net.impl.Users.RentedMovie;
 import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.impl.generalImpls.connectionImpl;
@@ -92,6 +93,44 @@ public class RequestSystem extends BidiConnectionImple {
 
                 break;
             }
+
+            case "rent":{
+                if (Msg.size() > 1) {//we have movie name
+                    String movieName = Msg.get(1);
+                    String userName = ((String) this.connections.getLoggedInClients().get(connectionId));
+                    boolean alreadyRented = this.connections.getUserDataBase().GetUser(userName).alreadyRented(movieName);
+                    String userCountry = this.connections.getUserDataBase().GetUser(userName).getCountry();
+                    boolean Banned =this.connections.getMovieDataBase().getSpecificMovie(movieName).isBanned(userCountry);
+                    if(alreadyRented || Banned){
+                        this.connections.send(this.connectionId, "ERROR request rent failed");
+                        return;
+                    }
+                    //if we are here the user is not on the banned list and doesn't have the movie
+                    this.connections.getMovieDataBase().BlockMovies(()->{
+                                //Check if movies exist and has copies left
+                                boolean Good2Go = this.connections.getMovieDataBase().hasMovie(movieName);
+                                Good2Go = Good2Go & this.connections.getMovieDataBase().hasAviliableCopiesLeft(movieName);
+                                ///if the user has sufficient funds
+                                int moviePrice = this.connections.getMovieDataBase().getSpecificMovie(movieName).getPrice();
+                                boolean hasSufficientfunds = this.connections.getUserDataBase().GetUser(userName).getBalance() >= moviePrice ;
+                                Good2Go = Good2Go && hasSufficientfunds;
+                                ////If Good2Go is still true then all test have passed thus we need to actually rent the movie
+                                ////first We need to remove the movie from the movie list(decrement it) and then update the movie json
+                                ////then we add the movie to the user
+                                if(Good2Go) {
+                                    RentedMovie rentedMovie = this.connections.getMovieDataBase().RentMovie(movieName);
+                                    this.connections.getUserDataBase().GetUser(userName).addMovie(rentedMovie,moviePrice);
+                                }else
+                                    this.connections.send(this.connectionId, "ERROR request rent failed");
+                            }
+                    );
+
+
+                }
+
+                break;
+            }
+
         }//end of switch-case
 
     }//end of function

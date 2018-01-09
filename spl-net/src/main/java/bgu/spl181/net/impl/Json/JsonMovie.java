@@ -2,6 +2,7 @@ package bgu.spl181.net.impl.Json;
 
 import bgu.spl181.net.impl.Blockbuster.Movies;
 import bgu.spl181.net.impl.Blockbuster.singleMovieInfo;
+import bgu.spl181.net.impl.Users.RentedMovie;
 import bgu.spl181.net.impl.Users.Users;
 import com.google.gson.*;
 
@@ -14,7 +15,7 @@ public class JsonMovie {
     private Movies movies = new Movies();//Need this to Write to Json
     private ReadWriteLock Lock = new ReentrantReadWriteLock();
     private String path;
-    private Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class,(JsonSerializer<Integer>)(intger, type, JsonSerializationContext)->new JsonPrimitive(intger.toString())).setPrettyPrinting().create();
+    private Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, (JsonSerializer<Integer>) (intger, type, JsonSerializationContext) -> new JsonPrimitive(intger.toString())).setPrettyPrinting().create();
     private JsonObject jsondoc;
 
     public JsonMovie(String path) {
@@ -53,8 +54,7 @@ public class JsonMovie {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             this.Lock.readLock().unlock();
         }
     }
@@ -98,17 +98,26 @@ public class JsonMovie {
         updateMovies();
         String tmp = "";
         for (int index = 0; index < movies.getMovies().size(); index++) {
-            tmp = tmp.concat(", \"" + movies.getMovies().get(index).getName()+ "\"");
+            tmp = tmp.concat(", \"" + movies.getMovies().get(index).getName() + "\"");
         }
 
         return tmp;
     }
 
-    public void BlockMovies(Runnable task){
+    public void BlockMovies(Runnable task) {
         this.Lock.writeLock().lock();
         task.run();
         this.Lock.writeLock().unlock();
     }
+
+    ///note that this function is always called from Block Movies task runnable meaning the json is locked for other users
+    public RentedMovie RentMovie(String movieName) {
+        updateMovies();
+        RentedMovie ans = this.movies.RentMovie(movieName);
+        WriteJson();
+        return ans;
+    }
 }
+
 
 

@@ -1,6 +1,8 @@
 package bgu.spl181.net.impl.Blockbuster;
 
 
+import bgu.spl181.net.impl.Users.RentedMovie;
+
 import java.util.List;
 
 /**
@@ -37,5 +39,11 @@ public class Movies {
 
     public List<singleMovieInfo> getMovies() {
         return movies;
+    }
+
+    public RentedMovie RentMovie(String movieName) {
+        singleMovieInfo movie = getSpecificMovie(movieName);
+        movie.rentMovie();//decrement available copies
+        return new RentedMovie(movie.getId(), movie.getName());
     }
 }
