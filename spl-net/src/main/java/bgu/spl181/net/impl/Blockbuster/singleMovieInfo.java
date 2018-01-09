@@ -1,5 +1,8 @@
 package bgu.spl181.net.impl.Blockbuster;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class represents a single movie in the system
  * primitive implementation
@@ -11,9 +14,9 @@ public class singleMovieInfo {
     private int totalAmount;
     private int availableAmount;
     private int price;
-    private String[] bannedCountries;
+    private List<String> bannedCountries = new ArrayList<>();
 
-    public singleMovieInfo(int id, String name, int totalCopies, int price, String[] bannedCountries){
+    public singleMovieInfo(int id, String name, int totalCopies, int price, List<String> bannedCountries){
         this.bannedCountries = bannedCountries;
         this.availableAmount = totalCopies;
         this.totalAmount = totalCopies;
@@ -32,7 +35,7 @@ public class singleMovieInfo {
 
     public String getName() { return name; }
 
-    public String[] getBannedCountries() { return bannedCountries; }
+    public List<String> getBannedCountries() { return bannedCountries; }
 
     public void setPrice(int price) { this.price = price; }
 
@@ -40,14 +43,5 @@ public class singleMovieInfo {
 
     public void rentMovie(){ this.availableAmount--; }
 
-    public boolean isBanned(String userCountry){
-
-        boolean banned = false;
-        for(int index = 0; index < this.bannedCountries.length; index++) {
-            if (bannedCountries[index].equals(userCountry))
-                banned = true;
-        }
-
-        return banned;
-    }
+    public boolean isBanned(String userCountry){ return bannedCountries.contains(userCountry); }
 }

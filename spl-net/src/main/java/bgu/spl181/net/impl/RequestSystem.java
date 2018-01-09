@@ -2,7 +2,6 @@ package bgu.spl181.net.impl;
 
 import bgu.spl181.net.impl.Blockbuster.singleMovieInfo;
 import bgu.spl181.net.impl.Users.RentedMovie;
-import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.impl.generalImpls.connectionImpl;
 
@@ -49,36 +48,39 @@ public class RequestSystem extends BidiConnectionImple {
             }
             case "info": {
                 if (Msg.size() > 1) {//we have movie name
-                    String movieName = reMakeMovieName();
+                    String movieName = Msg.get(1);
                     boolean Good2GO = this.connections.getMovieDataBase().hasMovie(movieName);
                     if (Good2GO) {
                         singleMovieInfo tmp = this.connections.getMovieDataBase().getSpecificMovie(Msg.get(1));
                         ACK = "ACK " + parametersConcat(tmp);
+                        this.connections.send(this.connectionId, ACK);
+
                     }//end of if
                     else//movie doesn't exist
                         this.connections.send(this.connectionId, "Error request info failed");
-                } else
+                } else {
                     ACK = "ACK " + this.connections.getMovieDataBase().getAllMoviesNames();
+                    this.connections.send(this.connectionId, ACK);
+                }
 
-                this.connections.send(this.connectionId, ACK);
-                break;
+                    break;
             }
             case "return":{
                 if (Msg.size() > 1){
 
-                    String movieName = reMakeMovieName();
+                    String movieName = Msg.get(1);
                     final String ACK1 = "ACK " + movieName + " success";
                     String userName = (String) this.connections.getLoggedInClients().get(connectionId);
-                    boolean Good2Go =  !this.connections.getUserDataBase().GetUser(userName).alreadyRented(movieName);
+                    boolean Good2Go =  this.connections.getUserDataBase().GetUser(userName).alreadyRented(movieName);
 
                     if(Good2Go){
 
                         this.connections.getMovieDataBase().BlockMovies(()-> {
                             if(this.connections.getMovieDataBase().hasMovie(movieName)) {
-                                this.connections.getMovieDataBase().getSpecificMovie(movieName).addCopy();
-                                this.connections.getUserDataBase().GetUser(userName).RemMovies(movieName);
+                                this.connections.getMovieDataBase().addCopy(movieName);
+                                this.connections.getUserDataBase().remMovie(movieName,userName);
                                 this.connections.send(this.connectionId,ACK1);
-                                String broadcast = "movie \" "+movieName+"\"";
+                                String broadcast = "movie \" "+ movieName +"\"";
                                 broadcast = broadcast.concat(" " + this.connections.getMovieDataBase().getSpecificMovie(movieName).getAvailableAmount());
                                 broadcast = broadcast.concat(" " + this.connections.getMovieDataBase().getSpecificMovie(movieName).getPrice());
                                 this.connections.broadcast(broadcast);
@@ -86,9 +88,10 @@ public class RequestSystem extends BidiConnectionImple {
                                 this.connections.send(this.connectionId,"Error request return failed");
                         });
                     }
+                    else //movie doesn't exist
+                        this.connections.send(this.connectionId,"Error request return failed");
 
-
-                }else //movie doesn't exist
+                }else //no movie name provided
                     this.connections.send(this.connectionId,"Error request return failed");
 
                 break;
@@ -137,7 +140,7 @@ public class RequestSystem extends BidiConnectionImple {
 
     private String parametersConcat(singleMovieInfo tmp) {
         String toReturn = "";
-        toReturn = toReturn.concat(tmp.getName());
+        toReturn = toReturn.concat("\"" + tmp.getName() +"\"");
         toReturn = toReturn.concat(" " + tmp.getAvailableAmount());
         toReturn = toReturn.concat(" " + tmp.getTotalAmount());
         toReturn = toReturn.concat(" " + tmp.getPrice());
@@ -145,15 +148,5 @@ public class RequestSystem extends BidiConnectionImple {
             toReturn = toReturn.concat(" \"" + banned + "\"");
         }
         return toReturn;
-    }
-
-    private String reMakeMovieName() {
-        String toReturn = "";
-        for (int index = 1; index < Msg.size(); index++)
-            toReturn = toReturn.concat(" " + Msg.get(index));
-
-        toReturn = toReturn.substring(1);//removing the first space which is not needed
-        return toReturn;
-
     }
 }

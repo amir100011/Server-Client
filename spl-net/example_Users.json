@@ -35,20 +35,8 @@
         {
           "id": "1",
           "name": "The Godfather"
-        },
-        {
-          "id": "2",
-          "name": "The Pursuit Of Happyness"
         }
       ]
-    },
-    {
-      "username": "Amir",
-      "password": "123",
-      "type": "normal",
-      "country": "Israel",
-      "balance": "50",
-      "movies": []
     }
   ]
 }

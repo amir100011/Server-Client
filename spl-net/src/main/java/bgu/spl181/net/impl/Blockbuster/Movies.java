@@ -31,8 +31,8 @@ public class Movies {
      */
     public singleMovieInfo getSpecificMovie(String movieName){
         for (singleMovieInfo movieToReturn: this.movies) {
-            if(movieToReturn.getName().equals(movieName));
-            return movieToReturn;
+            if(movieToReturn.getName().equals(movieName))
+                return movieToReturn;
         }
         return null;
     }

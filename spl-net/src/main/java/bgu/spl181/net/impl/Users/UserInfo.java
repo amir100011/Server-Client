@@ -64,6 +64,7 @@ public class UserInfo {
         for (RentedMovie movie : movies) {
             if(movie.getMovieName().equals(movieName)){
                 movies.remove(movie);
+                break;
             }
         }
     }

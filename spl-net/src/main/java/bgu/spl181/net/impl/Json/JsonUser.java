@@ -1,6 +1,7 @@
 package bgu.spl181.net.impl.Json;
 
 
+import bgu.spl181.net.impl.Users.RentedMovie;
 import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.impl.Users.Users;
 import com.google.gson.*;
@@ -87,6 +88,13 @@ private boolean WriteJson(){
             GetUser(userName).decFromBalance(decMoney);
             WriteJson();
         }
+    }
+
+    public void remMovie(String movieName,String userName){
+
+        updateUsers();
+        GetUser(userName).RemMovies(movieName);
+        WriteJson();
     }
 
 }

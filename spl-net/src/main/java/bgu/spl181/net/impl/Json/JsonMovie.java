@@ -32,7 +32,7 @@ public class JsonMovie {
     private boolean WriteJson() {
         Lock.writeLock().lock();
         try (FileWriter UpDater = new FileWriter(path)) {
-            gson.toJson(movies, Users.class, UpDater);
+            gson.toJson(movies, Movies.class, UpDater);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -79,11 +79,8 @@ public class JsonMovie {
 
     public boolean isBanned(String movieName, String usersCountry) {
         if (hasMovie(movieName)) {
-            String[] tmp = getSpecificMovie(movieName).getBannedCountries();
-            for (String isBanned : tmp) {
-                if (isBanned.equals(usersCountry))
-                    return true;
-            }
+            getSpecificMovie(movieName).getBannedCountries().contains(usersCountry);
+            return true;
         }
         return false;
     }
@@ -116,6 +113,12 @@ public class JsonMovie {
         RentedMovie ans = this.movies.RentMovie(movieName);
         WriteJson();
         return ans;
+    }
+
+    public void addCopy(String movieName){
+        updateMovies();
+        this.movies.getSpecificMovie(movieName).addCopy();
+        WriteJson();
     }
 }
 
