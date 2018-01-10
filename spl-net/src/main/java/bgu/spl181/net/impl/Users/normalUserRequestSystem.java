@@ -1,4 +1,4 @@
-package bgu.spl181.net.impl;
+package bgu.spl181.net.impl.Users;
 
 import bgu.spl181.net.impl.Blockbuster.singleMovieInfo;
 import bgu.spl181.net.impl.Json.JsonMovie;
@@ -9,19 +9,19 @@ import bgu.spl181.net.impl.generalImpls.connectionImpl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class RequestSystem extends BidiConnectionImple {
+public class normalUserRequestSystem extends BidiConnectionImple {
 
     private LinkedList<String> Msg;
     private connectionImpl connections;
     private int connectionId;
 
-    public RequestSystem(LinkedList<String> Msg, connectionImpl connection, int connectionID) {
+    public normalUserRequestSystem(LinkedList<String> Msg, connectionImpl connection, int connectionID) {
         this.Msg = Msg;
         this.connectionId = connectionID;
         this.connections = connection;
     }
 
-    public void requestSystem() {
+    public void normalRequestSystem() {
 
 
         String reqKind = this.Msg.get(0);
@@ -140,56 +140,15 @@ public class RequestSystem extends BidiConnectionImple {
                 break;
             }
 
-            case "addmovie":{
-                String userName = (String)this.connections.getLoggedInClients().get(this.connectionId);
-                boolean Admin = this.connections.getUserDataBase().GetUser(userName).getIsAdmin();
-                if(!Admin || Msg.size() < 5 )
-                    this.connections.send(this.connectionId, "ERROR request addmovie");
-                ///The addmovie command contains "movie name" ,amount and price
-                String movieName = this.Msg.get(2);
-                String copies = this.Msg.get(3);
-                String MoviePrice = this.Msg.get(4);
-                Integer price = null;
-                Integer Copies = null;
-                try{
-                    price = Integer.parseInt(MoviePrice);
-                    Copies = Integer.parseInt(copies);
-                }catch(NumberFormatException e){ }
-                final Integer Price = price;
-                final Integer _Copies = Copies;
-                if(price == null || price <= 0)
-                    this.connections.send(this.connectionId, "ERROR request addmovie");
-                ////Check For Banned Movies
-                ArrayList<String> bannedCountry = new ArrayList<>();
-                if(Msg.size() > 5){//Has BannedMovies
-                    for(int i = 5 ; i < Msg.size(); i++)
-                        bannedCountry.add(Msg.get(i));
+            default:
+                boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
+                if (Good2Go) {
+                    Msg.removeFirst();//remove the Request word
+                    adminUserRequestSystem tmp = new adminUserRequestSystem(Msg, this.connections, this.connectionId);
+                    tmp.adminRequestSystem();
+                    break;
                 }
-
-                //Passed all test
-                this.connections.getMovieDataBase().BlockMovies(()-> {
-                            boolean hasmovie = this.connections.getMovieDataBase().hasMovie(movieName);
-                            if (hasmovie)
-                                this.connections.send(this.connectionId, "ERROR request addmovie");
-                            else {//ALL Test Have Passed Need to Add Movie
-                                int id = this.connections.getMovieDataBase().getNewMovieId();
-                                singleMovieInfo newmovie = new singleMovieInfo(id, movieName, _Copies, Price , bannedCountry);
-                                this.connections.getMovieDataBase().addMovie(newmovie);
-                                this.connections.send(this.connectionId, "ACK addmovie "+"\""+newmovie.getName() +"\"" + "success");
-                                this.connections.broadcast("movie"+parametersConcatForMovie(newmovie));
-                            }
-                        }
-                );
-
-
-
-
-
-
-
-
-            }
-
+                break;
 
         }//end of switch-case
 
@@ -207,11 +166,5 @@ public class RequestSystem extends BidiConnectionImple {
         return toReturn;
     }
 
-    private String parametersConcatForMovie(singleMovieInfo tmp) {
-        String toReturn = "";
-        toReturn = toReturn.concat("\""+tmp.getName()+"\"");
-        toReturn = toReturn.concat(" " + tmp.getAvailableAmount());
-        toReturn = toReturn.concat(" " + tmp.getPrice());
-        return toReturn;
-    }
+
 }

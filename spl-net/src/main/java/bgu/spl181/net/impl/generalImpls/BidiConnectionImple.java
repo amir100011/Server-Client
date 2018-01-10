@@ -1,7 +1,7 @@
 package bgu.spl181.net.impl.generalImpls;
 
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
-import bgu.spl181.net.impl.RequestSystem;
+import bgu.spl181.net.impl.Users.normalUserRequestSystem;
 import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.srv.bidi.ConnectionHandler;
 
@@ -122,8 +122,8 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                     boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
                     if (Good2Go) {
                         Msg.removeFirst();//remove the Request word
-                        RequestSystem tmp = new RequestSystem(Msg, this.connections, this.connectionId);
-                        tmp.requestSystem();
+                        normalUserRequestSystem tmp = new normalUserRequestSystem(Msg, this.connections, this.connectionId);
+                        tmp.normalRequestSystem();
                         break;
                     }
                 }
