@@ -125,6 +125,12 @@ public class JsonMovie {
         updateMovies();
         return this.movies.getNewMovieId();
     }
+
+    public void remMovie(singleMovieInfo movieToRemmove) {
+        updateMovies();
+        this.movies.remMovie(movieToRemmove);
+        WriteJson();
+    }
 }
 
 

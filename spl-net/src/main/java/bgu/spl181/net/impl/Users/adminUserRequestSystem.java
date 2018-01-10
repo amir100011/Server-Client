@@ -75,11 +75,26 @@ public class adminUserRequestSystem {
                 boolean Admin = this.connections.getUserDataBase().GetUser(userName).getIsAdmin();
                 if (Admin){
                     if(Msg.size()> 0) {
-                        singleMovieInfo movieToRemmove = this.connections.getMovieDataBase()
-                        boolean isRented = this.connections.getMovieDataBase().getSpecificMovie()
-
-                    }
-                }
+                        this.connections.getMovieDataBase().BlockMovies(()-> {
+                            singleMovieInfo movieToRemmove = this.connections.getMovieDataBase().getSpecificMovie(Msg.get(1));
+                            if (movieToRemmove != null) {
+                                boolean isRented = !(movieToRemmove.getAvailableAmount() == movieToRemmove.getTotalAmount());
+                                if (!isRented) {//movie is not rented
+                                    this.connections.getMovieDataBase().remMovie(movieToRemmove);
+                                    String ACK1 = "ACK remmovie " + movieToRemmove.getName() + " success";
+                                    String ACK2 = "ACK " + movieToRemmove.getName() + " removed";
+                                    this.connections.send(this.connectionId,ACK1);
+                                    this.connections.broadcast(ACK2);
+                                    }else
+                                    this.connections.send(this.connectionId,"Error Request remmovie failed");
+                                }else
+                                this.connections.send(this.connectionId,"Error Request remmovie failed");
+                            }
+                        );
+                    }else
+                        this.connections.send(this.connectionId,"Error Request remmovie failed");
+                }else
+                    this.connections.send(this.connectionId,"Error Request remmovie failed");
 
                 break;
             }

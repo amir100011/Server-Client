@@ -49,11 +49,21 @@ public class Movies {
 
 
     public int getNewMovieId() {
-        int highestId = 1;
+        int highestId = 0;
         for (singleMovieInfo movie: this.movies) {
             if(highestId < movie.getId())
                 highestId = movie.getId();
         }
-        return highestId;
+        return highestId + 1;
+    }
+
+    public void remMovie(singleMovieInfo movieToRemmove) {
+        for (singleMovieInfo movie : this.movies) {
+            if(movie.getName().equals(movieToRemmove.getName())){
+                this.movies.remove(movie);
+                break;
+            }
+        }
+        return;
     }
 }

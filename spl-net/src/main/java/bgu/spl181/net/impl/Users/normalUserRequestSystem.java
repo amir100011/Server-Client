@@ -143,7 +143,6 @@ public class normalUserRequestSystem extends BidiConnectionImple {
             default:
                 boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
                 if (Good2Go) {
-                    Msg.removeFirst();//remove the Request word
                     adminUserRequestSystem tmp = new adminUserRequestSystem(Msg, this.connections, this.connectionId);
                     tmp.adminRequestSystem();
                     break;

@@ -23,6 +23,8 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                 msg = msg.substring(1,msg.length());
                 Msg.add(msg.substring(0,msg.indexOf("\"")));
                 msg = msg.substring(msg.indexOf("\"") + 1);
+                while(msg.startsWith(" "))
+                    msg = msg.substring(1);
             }
             else {
                 Msg.add(msg.substring(0, msg.indexOf(" ")));
