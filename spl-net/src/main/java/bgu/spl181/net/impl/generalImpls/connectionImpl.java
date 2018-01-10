@@ -33,7 +33,7 @@ public class connectionImpl<T> implements Connections {
         ConnectionHandler connectedClient;
         for (Integer activeClient : ActiveClients) {
             connectedClient = this.getClientsDataBase().get(activeClient);
-            connectedClient.send(msg);
+            connectedClient.send("BROADCAST " + msg);
         }
 
     }

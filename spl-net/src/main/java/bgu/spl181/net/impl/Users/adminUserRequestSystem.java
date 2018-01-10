@@ -27,12 +27,12 @@ public class adminUserRequestSystem {
             case "addmovie":{
                 String userName = (String)this.connections.getLoggedInClients().get(this.connectionId);
                 boolean Admin = this.connections.getUserDataBase().GetUser(userName).getIsAdmin();
-                if(!Admin || Msg.size() < 5 )
+                if(!Admin || Msg.size() < 4 )
                     this.connections.send(this.connectionId, "ERROR request addmovie");
                 ///The addmovie command contains "movie name" ,amount and price
-                String movieName = this.Msg.get(2);
-                String copies = this.Msg.get(3);
-                String MoviePrice = this.Msg.get(4);
+                String movieName = this.Msg.get(1);
+                String copies = this.Msg.get(2);
+                String MoviePrice = this.Msg.get(3);
                 Integer price = null;
                 Integer Copies = null;
                 try{
@@ -45,8 +45,8 @@ public class adminUserRequestSystem {
                     this.connections.send(this.connectionId, "ERROR request addmovie");
                 ////Check For Banned Movies
                 ArrayList<String> bannedCountry = new ArrayList<>();
-                if(Msg.size() > 5){//Has BannedMovies
-                    for(int i = 5 ; i < Msg.size(); i++)
+                if(Msg.size() > 4){//Has BannedMovies
+                    for(int i = 4 ; i < Msg.size(); i++)
                         bannedCountry.add(Msg.get(i));
                 }
 
@@ -59,8 +59,8 @@ public class adminUserRequestSystem {
                                 int id = this.connections.getMovieDataBase().getNewMovieId();
                                 singleMovieInfo newmovie = new singleMovieInfo(id, movieName, _Copies, Price , bannedCountry);
                                 this.connections.getMovieDataBase().addMovie(newmovie);
-                                this.connections.send(this.connectionId, "ACK addmovie "+"\""+newmovie.getName() +"\"" + "success");
-                                this.connections.broadcast("movie"+parametersConcatForMovie(newmovie));
+                                this.connections.send(this.connectionId, "ACK addmovie "+"\""+newmovie.getName() +"\"" + " success");
+                                this.connections.broadcast("movie "+parametersConcatForMovie(newmovie));
                             }
                         }
                 );
@@ -81,8 +81,8 @@ public class adminUserRequestSystem {
                                 boolean isRented = !(movieToRemmove.getAvailableAmount() == movieToRemmove.getTotalAmount());
                                 if (!isRented) {//movie is not rented
                                     this.connections.getMovieDataBase().remMovie(movieToRemmove);
-                                    String ACK1 = "ACK remmovie " + movieToRemmove.getName() + " success";
-                                    String ACK2 = "ACK " + movieToRemmove.getName() + " removed";
+                                    String ACK1 = "ACK remmovie \"" + movieToRemmove.getName() + "\" success";
+                                    String ACK2 = "ACK \"" + movieToRemmove.getName() + "\" removed";
                                     this.connections.send(this.connectionId,ACK1);
                                     this.connections.broadcast(ACK2);
                                     }else

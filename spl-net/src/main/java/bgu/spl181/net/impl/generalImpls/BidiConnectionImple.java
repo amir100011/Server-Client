@@ -17,7 +17,11 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
 
         LinkedList<String> Msg = new LinkedList<>();
 
-        while (msg.indexOf(" ") != -1) {
+        if(msg.startsWith("Register")) {
+           msg =  msg.replace("country=\"", "\"country=");
+        }
+
+        while (msg.length() > 0) {
 
             if(msg.startsWith("\"")){
                 msg = msg.substring(1,msg.length());
@@ -27,8 +31,13 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                     msg = msg.substring(1);
             }
             else {
-                Msg.add(msg.substring(0, msg.indexOf(" ")));
-                msg = msg.substring(msg.indexOf(" ") + 1);
+                try {
+                    Msg.add(msg.substring(0, msg.indexOf(" ")));
+                    msg = msg.substring(msg.indexOf(" ") + 1);
+                } catch (StringIndexOutOfBoundsException n){
+                    Msg.add(msg);
+                    msg = "";
+                }
             }
         }
         if(!msg.equals(""))

@@ -82,7 +82,7 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                                 this.connections.getMovieDataBase().addCopy(movieName);
                                 this.connections.getUserDataBase().remMovie(movieName,userName);
                                 this.connections.send(this.connectionId,ACK1);
-                                String broadcast = "movie \" "+ movieName +"\"";
+                                String broadcast = "movie \""+ movieName +"\"";
                                 broadcast = broadcast.concat(" " + this.connections.getMovieDataBase().getSpecificMovie(movieName).getAvailableAmount());
                                 broadcast = broadcast.concat(" " + this.connections.getMovieDataBase().getSpecificMovie(movieName).getPrice());
                                 this.connections.broadcast(broadcast);
@@ -125,9 +125,9 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                                 if(Good2Go) {
                                     RentedMovie rentedMovie = this.connections.getMovieDataBase().RentMovie(movieName);
                                     this.connections.getUserDataBase().addMovie(userName,rentedMovie,moviePrice);
-                                    this.connections.send(this.connectionId, "ACK rent"+"\""+movieName +"\""+  "success");
+                                    this.connections.send(this.connectionId, "ACK rent "+"\""+movieName +"\""+  " success");
 
-                                    this.connections.broadcast("movie" +parametersConcat(movieDataBase.getSpecificMovie(movieName)));
+                                    this.connections.broadcast("movie " +parametersConcat(movieDataBase.getSpecificMovie(movieName)));
 
                                 }else
                                     this.connections.send(this.connectionId, "ERROR request rent failed");
