@@ -27,20 +27,23 @@ public JsonUser(String path){
      * updates the users of the system
      */
 private void updateUsers(){
+    Lock.readLock().lock();
     try (Reader Reader = new FileReader(path)) {
         users = gson.fromJson(Reader,users.getClass());
     } catch (FileNotFoundException e) {
         e.printStackTrace();
     } catch (IOException e) {
         e.printStackTrace();
+    }finally {
+        Lock.readLock().unlock();
     }
 
 }
 
 public boolean AddUser(UserInfo userInfo) {
-   if(users.UserExist(userInfo))
-       return false;
+    Lock.writeLock().lock();
     users.AddUser(userInfo);
+    Lock.writeLock().unlock();
     WriteJson();
     return true;
 }
@@ -77,29 +80,36 @@ private boolean WriteJson(){
     }
 
     public void addToBalance(String userName,int addMoney){
+        Lock.writeLock().lock();
         if(HasUser(userName)){
             GetUser(userName).addToBalance(addMoney);
             WriteJson();
         }
+        Lock.writeLock().unlock();
     }
 
     public void decFromBalance(String userName,int decMoney){
+        Lock.writeLock().lock();
         if(HasUser(userName)){
             GetUser(userName).decFromBalance(decMoney);
             WriteJson();
         }
+        Lock.writeLock().unlock();
     }
 
     public void remMovie(String movieName,String userName){
-
+        Lock.writeLock().lock();
         updateUsers();
         GetUser(userName).RemMovies(movieName);
         WriteJson();
+        Lock.writeLock().unlock();
     }
 
     public void addMovie(String userName,RentedMovie rentedMovie, int moviePrice) {
+    Lock.writeLock().lock();
     updateUsers();
     GetUser(userName).addMovie(rentedMovie,moviePrice);
     WriteJson();
+    Lock.writeLock().unlock();
     }
 }

@@ -2,15 +2,11 @@ import bgu.spl181.net.api.MessageEncoderDecoder;
 import bgu.spl181.net.api.bidi.BidiMessagingProtocol;
 import bgu.spl181.net.impl.Json.JsonMovie;
 import bgu.spl181.net.impl.Json.JsonUser;
-import bgu.spl181.net.impl.Users.RentedMovie;
-import bgu.spl181.net.impl.Users.UserInfo;
 import bgu.spl181.net.impl.echo.LineMessageEncoderDecoder;
 import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.srv.BaseServer;
 import bgu.spl181.net.srv.Reactor;
 import bgu.spl181.net.srv.Server;
-
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class Test {

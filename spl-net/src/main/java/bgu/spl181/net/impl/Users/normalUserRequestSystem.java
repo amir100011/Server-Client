@@ -71,7 +71,7 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                 if (Msg.size() > 1){
 
                     String movieName = Msg.get(1);
-                    final String ACK1 = "ACK " + movieName + " success";
+                    final String ACK1 = "ACK return " + movieName + " success";
                     String userName = (String) this.connections.getLoggedInClients().get(connectionId);
                     boolean Good2Go =  this.connections.getUserDataBase().GetUser(userName).alreadyRented(movieName);
 

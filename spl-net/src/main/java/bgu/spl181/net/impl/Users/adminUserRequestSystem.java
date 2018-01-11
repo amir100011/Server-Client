@@ -67,7 +67,6 @@ public class adminUserRequestSystem {
 
                 break;
             }
-
             case "remmovie":{
 
 
@@ -97,6 +96,31 @@ public class adminUserRequestSystem {
                     this.connections.send(this.connectionId,"Error Request remmovie failed");
 
                 break;
+            }
+            case "changeprice":{
+                String userName = (String)this.connections.getLoggedInClients().get(this.connectionId);
+                boolean Admin = this.connections.getUserDataBase().GetUser(userName).getIsAdmin();
+                if(!Admin || Msg.size() < 3 )
+                    this.connections.send(this.connectionId, "ERROR request addmovie");
+                String movieName = this.Msg.get(1);
+                String MoviePrice = this.Msg.get(2);
+                Integer price = null;
+                try{
+                    price = Integer.parseInt(MoviePrice);
+                }catch(NumberFormatException e){ }
+                final Integer Price = price;
+                if(price == null || price <= 0)
+                    this.connections.send(this.connectionId, "ERROR request changeprice");
+                this.connections.getMovieDataBase().BlockMovies(()-> {
+                    boolean hasmovie = this.connections.getMovieDataBase().hasMovie(movieName);
+                    if(!hasmovie)
+                        this.connections.send(this.connectionId, "ERROR request changeprice");
+                    else{
+                        this.connections.getMovieDataBase().changePrice(Price,movieName);//Changed Price
+                        this.connections.send(this.connectionId, "ACK changeprice "+"\""+movieName+"\""+ " success");
+                        this.connections.broadcast("movie" + parametersConcatForMovie(this.connections.getMovieDataBase().getSpecificMovie(movieName)));
+                    }
+                });
             }
 
 

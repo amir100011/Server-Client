@@ -59,10 +59,15 @@ public class JsonMovie {
     }
 
     public boolean addMovie(singleMovieInfo movieToAdd) {
-        if (movies.HasMovie(movieToAdd.getName()))
+        Lock.writeLock().lock();
+        updateMovies();
+        if (movies.HasMovie(movieToAdd.getName())) {
+            Lock.writeLock().unlock();
             return false;
+        }
         movies.addMovie(movieToAdd);
         WriteJson();
+        Lock.writeLock().unlock();
         return true;
     }
 
@@ -77,6 +82,7 @@ public class JsonMovie {
     }
 
     public boolean isBanned(String movieName, String usersCountry) {
+        updateMovies();
         if (hasMovie(movieName)) {
             getSpecificMovie(movieName).getBannedCountries().contains(usersCountry);
             return true;
@@ -85,6 +91,7 @@ public class JsonMovie {
     }
 
     public boolean hasAviliableCopiesLeft(String movieName) {
+        updateMovies();
         if (hasMovie(movieName))
             return (getSpecificMovie(movieName).getAvailableAmount() > 0);
         return false;
@@ -108,16 +115,20 @@ public class JsonMovie {
 
     ///note that this function is always called from Block Movies task runnable meaning the json is locked for other users
     public RentedMovie RentMovie(String movieName) {
+        Lock.writeLock().lock();
         updateMovies();
         RentedMovie ans = this.movies.RentMovie(movieName);
         WriteJson();
+        Lock.writeLock().unlock();
         return ans;
     }
 
     public void addCopy(String movieName){
+        Lock.writeLock().lock();
         updateMovies();
         this.movies.getSpecificMovie(movieName).addCopy();
         WriteJson();
+        Lock.writeLock().unlock();
     }
 
 
@@ -127,9 +138,19 @@ public class JsonMovie {
     }
 
     public void remMovie(singleMovieInfo movieToRemmove) {
+        Lock.writeLock().lock();
         updateMovies();
         this.movies.remMovie(movieToRemmove);
         WriteJson();
+        Lock.writeLock().unlock();
+    }
+
+    public void changePrice(Integer price, String movieName) {
+        Lock.writeLock().lock();
+        updateMovies();
+        this.movies.changePrice(price,movieName);
+        WriteJson();
+        Lock.writeLock().unlock();
     }
 }
 

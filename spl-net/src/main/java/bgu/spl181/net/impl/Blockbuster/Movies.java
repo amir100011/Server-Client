@@ -66,4 +66,13 @@ public class Movies {
         }
         return;
     }
+
+    public void changePrice(Integer price, String movieName) {
+        for (singleMovieInfo movie : this.movies) {
+            if(movie.getName().equals(movieName)) {//Found the movie
+                movie.setPrice(price);
+                return;
+            }
+        }
+    }
 }

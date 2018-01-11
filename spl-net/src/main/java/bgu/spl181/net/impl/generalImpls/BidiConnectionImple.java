@@ -64,7 +64,7 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
 
 
             switch (msgStr) {
-                case "Register": {
+                case "REGISTER": {
                     String Error = "Error registration failed";
                     String ACK = "ACK registration succeeded";
 
@@ -79,7 +79,7 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                         String Country = Msg.get(3);//country="Country" <---need the "    "  statement only
                         Good2Go = Good2Go && Country.contains("country=");//if Register Command holds "country=" as instructed
                         if (Good2Go) {
-                            Country = Country.substring(Country.indexOf("=") + 2, Country.length() - 1);
+                            Country = Country.substring(Country.indexOf("=") + 1, Country.length() - 1);
                             UserInfo newUser = new UserInfo(userName, password, Country);
                             this.connections.getUserDataBase().AddUser(newUser);
                             this.connections.send(this.connectionId, ACK);
@@ -91,7 +91,7 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
 
                 }
 
-                case "Login": {
+                case "LOGIN": {
                     String Error = "Error login failed";
                     String ACK = "ACK login succeeded";
 
