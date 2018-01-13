@@ -30,7 +30,7 @@ public class ReactorMain {
                     return new BidiConnectionImple();
                 }
             };
-            Server<String> server = Server.reactor(8,7777, ProtocolSupplier, encdec);
+            Server<String> server = Server.reactor(28,7777, ProtocolSupplier, encdec);
             ((Reactor)server).setJson(JsonUsers, jsonMovies);
             server.serve();
 

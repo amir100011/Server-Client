@@ -134,7 +134,6 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                             }
                     );
 
-
                 }
 
                 break;

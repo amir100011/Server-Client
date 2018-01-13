@@ -5,15 +5,7 @@
       "password": "admin",
       "type": "admin",
       "country": "united states",
-      "balance": "102",
-      "movies": []
-    },
-    {
-      "username": "Client2",
-      "password": "tryingagain",
-      "type": "normal",
-      "country": "\"Russia",
-      "balance": "884",
+      "balance": "847",
       "movies": []
     },
     {
@@ -21,15 +13,7 @@
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "898",
-      "movies": []
-    },
-    {
-      "username": "Client3",
-      "password": "tryingagain",
-      "type": "normal",
-      "country": "\"Russia",
-      "balance": "868",
+      "balance": "800",
       "movies": []
     },
     {
@@ -37,23 +21,23 @@
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "890",
+      "balance": "800",
       "movies": []
     },
     {
-      "username": "Client6",
+      "username": "Client2",
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "894",
+      "balance": "800",
       "movies": []
     },
     {
-      "username": "Client7",
+      "username": "Client3",
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "904",
+      "balance": "800",
       "movies": []
     },
     {
@@ -61,55 +45,23 @@
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "890",
+      "balance": "800",
       "movies": []
     },
     {
-      "username": "Client8",
+      "username": "Client7",
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "892",
+      "balance": "800",
       "movies": []
     },
     {
-      "username": "Client5",
+      "username": "Client6",
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "884",
-      "movies": []
-    },
-    {
-      "username": "Client12",
-      "password": "tryingagain",
-      "type": "normal",
-      "country": "\"Russia",
-      "balance": "906",
-      "movies": []
-    },
-    {
-      "username": "Client9",
-      "password": "tryingagain",
-      "type": "normal",
-      "country": "\"Russia",
-      "balance": "886",
-      "movies": []
-    },
-    {
-      "username": "Client13",
-      "password": "tryingagain",
-      "type": "normal",
-      "country": "\"Russia",
-      "balance": "902",
-      "movies": []
-    },
-    {
-      "username": "Client10",
-      "password": "tryingagain",
-      "type": "normal",
-      "country": "\"Russia",
-      "balance": "898",
+      "balance": "800",
       "movies": []
     },
     {
@@ -117,15 +69,39 @@
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "884",
+      "balance": "800",
       "movies": []
     },
     {
-      "username": "Client14",
+      "username": "Client10",
       "password": "tryingagain",
       "type": "normal",
       "country": "\"Russia",
-      "balance": "914",
+      "balance": "800",
+      "movies": []
+    },
+    {
+      "username": "Client5",
+      "password": "tryingagain",
+      "type": "normal",
+      "country": "\"Russia",
+      "balance": "800",
+      "movies": []
+    },
+    {
+      "username": "Client9",
+      "password": "tryingagain",
+      "type": "normal",
+      "country": "\"Russia",
+      "balance": "800",
+      "movies": []
+    },
+    {
+      "username": "Client8",
+      "password": "tryingagain",
+      "type": "normal",
+      "country": "\"Russia",
+      "balance": "800",
       "movies": []
     }
   ]
