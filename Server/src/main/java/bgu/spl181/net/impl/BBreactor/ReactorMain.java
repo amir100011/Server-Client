@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 public class ReactorMain {
 
         public static void main(String[] args){
+            Integer port = Integer.parseInt("7777");
             String path = System.getProperty("user.dir");
             String pathUsers = path + "/Database/Users.json";
             String pathMovies = path + "/Database/Movies.json";
@@ -30,7 +31,7 @@ public class ReactorMain {
                     return new BidiConnectionImple();
                 }
             };
-            Server<String> server = Server.reactor(8,7777, ProtocolSupplier, encdec);
+            Server<String> server = Server.reactor(8,port, ProtocolSupplier, encdec);
             ((Reactor)server).setJson(JsonUsers, jsonMovies);
             server.serve();
 

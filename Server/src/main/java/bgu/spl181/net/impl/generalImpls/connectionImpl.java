@@ -55,20 +55,15 @@ public class connectionImpl<T> implements Connections {
     }
 
     @Override
-    public void disconnect(int connectionId, String UserName) {
+    public void disconnect(int connectionId) {
 
         boolean exists = this.clientsDataBase.containsKey(connectionId);
 
         if (exists) {
-            ConnectionHandler disconnect = this.clientsDataBase.get(connectionId);
-            try {
-                disconnect.close();
-                clientsDataBase.remove(connectionId, UserName);
-            } catch (IOException ignored) {
-                ignored.printStackTrace();//TODO delete before submitting
-            }
-
+            this.loggedInClients.remove(connectionId);
+            this.clientsDataBase.remove(connectionId);
         }//end of if
+
 
     }
 

@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 
 public class TPCMain {
     public static void main(String[] args){
+        Integer port = Integer.parseInt(args[0]);
         String path = System.getProperty("user.dir");
         String pathUsers = path + "/Database/Users.json";
         String pathMovies = path + "/Database/Movies.json";
@@ -31,7 +32,7 @@ public class TPCMain {
                 return new BidiConnectionImple();
             }
         };
-        Server<String> server = Server.threadPerClient(7777, ProtocolSupplier, encdec);
+        Server<String> server = Server.threadPerClient(port, ProtocolSupplier, encdec);
         ((BaseServer)server).setJson(JsonUsers, jsonMovies);
         server.serve();
 

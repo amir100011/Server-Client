@@ -10,7 +10,7 @@ public interface Connections<T> {
 
     void broadcast(T msg);
 
-    void disconnect(int connectionId, String UserName);
+    void disconnect(int connectionId);
 
     boolean AddConnection(int connectionId, ConnectionHandler handler);
 }

@@ -46,7 +46,7 @@ public class UserInfo {
     }
 
     public void decFromBalance(int balance) {
-        if(this.balance > balance)
+        if(this.balance >= balance)
             this.balance -= balance;
     }
 

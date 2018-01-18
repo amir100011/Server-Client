@@ -11,6 +11,8 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
 
     protected connectionImpl connections = null;
     protected int connectionId = -1;
+    private boolean shouldTerminate = false;
+
 
 
     public static LinkedList<String> BreakIntoWords(String msg) {
@@ -79,7 +81,7 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                         String Country = Msg.get(3);//country="Country" <---need the "    "  statement only
                         Good2Go = Good2Go && Country.contains("country=");//if Register Command holds "country=" as instructed
                         if (Good2Go) {
-                            Country = Country.substring(Country.indexOf("=") + 1, Country.length() - 1);
+                            Country = Country.substring(Country.indexOf("=") + 2, Country.length() - 1);
                             UserInfo newUser = new UserInfo(userName, password, Country);
                             this.connections.getUserDataBase().AddUser(newUser);
                             this.connections.send(this.connectionId, ACK);
@@ -121,8 +123,8 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
                     boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
                     if (Good2Go) {
                         this.connections.send(this.connectionId, ACK);
-                        this.connections.getLoggedInClients().remove(this.connectionId);
-                        this.connections.getClientsDataBase().remove(this.connectionId);
+                        this.connections.disconnect(this.connectionId);
+                        this.shouldTerminate = true;
                         break;
                     }
                     this.connections.send(this.connectionId, Error);
@@ -152,6 +154,6 @@ public class BidiConnectionImple implements BidiMessagingProtocol {
 
     @Override
     public boolean shouldTerminate() {
-        return false;
+        return this.shouldTerminate;
     }
 }

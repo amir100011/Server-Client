@@ -5,6 +5,7 @@ import bgu.spl181.net.impl.Json.JsonMovie;
 import bgu.spl181.net.impl.generalImpls.BidiConnectionImple;
 import bgu.spl181.net.impl.generalImpls.connectionImpl;
 
+import java.nio.file.AccessMode;
 import java.util.LinkedList;
 
 public class normalUserRequestSystem extends BidiConnectionImple {
@@ -24,10 +25,11 @@ public class normalUserRequestSystem extends BidiConnectionImple {
 
         String reqKind = this.Msg.get(0);
         String ACK = "";
-
+        String username =(String) this.connections.getLoggedInClients().get(this.connectionId);
         switch (reqKind) {
 
             case "balance": {
+                String ERROR = "ERROR request balance failed";
                 reqKind = this.Msg.get(1);
                 int balance;
                 String userName = ((String) this.connections.getLoggedInClients().get(connectionId));
@@ -36,7 +38,17 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                     ACK = "ACK balance " + balance;
                 }//end of ("info") if
                 else {//"add"
-                    Integer Amount = Integer.parseInt(Msg.get(2));
+                    Integer Amount;
+                    try {
+                        Amount= Integer.parseInt(Msg.get(2));
+                    }catch(NumberFormatException e ){
+                        this.connections.send(this.connectionId, ERROR);
+                        break;
+                    }
+                    if(Amount == null || Amount < 0){
+                        this.connections.send(this.connectionId, ERROR);
+                        break;
+                    }
                     this.connections.getUserDataBase().addToBalance(userName, Amount);
                     balance = this.connections.getUserDataBase().GetUser(userName).getBalance();
                     ACK = "ACK balance " + balance + " added " + Amount.toString();
@@ -52,12 +64,12 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                     boolean Good2GO = this.connections.getMovieDataBase().hasMovie(movieName);
                     if (Good2GO) {
                         singleMovieInfo tmp = this.connections.getMovieDataBase().getSpecificMovie(Msg.get(1));
-                        ACK = "ACK " + parametersConcat(tmp);
+                        ACK = "ACK info " + parametersConcat(tmp);
                         this.connections.send(this.connectionId, ACK);
 
                     }//end of if
                     else//movie doesn't exist
-                        this.connections.send(this.connectionId, "Error request info failed");
+                        this.connections.send(this.connectionId, "ERROR request info failed");
                 } else {
                     ACK = "ACK info " + this.connections.getMovieDataBase().getAllMoviesNames();
                     this.connections.send(this.connectionId, ACK);
@@ -85,14 +97,14 @@ public class normalUserRequestSystem extends BidiConnectionImple {
                                 broadcast = broadcast.concat(" " + this.connections.getMovieDataBase().getSpecificMovie(movieName).getPrice());
                                 this.connections.broadcast(broadcast);
                             } else //movie doesn't exist
-                                this.connections.send(this.connectionId,"Error request return failed");
+                                this.connections.send(this.connectionId,"ERROR request return failed");
                         });
                     }
                     else //movie doesn't exist
-                        this.connections.send(this.connectionId,"Error request return failed");
+                        this.connections.send(this.connectionId,"ERROR request return failed");
 
                 }else //no movie name provided
-                    this.connections.send(this.connectionId,"Error request return failed");
+                    this.connections.send(this.connectionId,"ERROR request return failed");
 
                 break;
             }
@@ -145,11 +157,14 @@ public class normalUserRequestSystem extends BidiConnectionImple {
 
             default:
                 boolean Good2Go = this.connections.isLoggedIn(this.connectionId);//if not exist returns false
-                if (Good2Go) {
+                boolean Admin = this.connections.getUserDataBase().GetUser(username).getIsAdmin();
+                if (Good2Go && Admin) {
                     adminUserRequestSystem tmp = new adminUserRequestSystem(Msg, this.connections, this.connectionId);
                     tmp.adminRequestSystem();
                     break;
                 }
+                String errorinfo ="ERROR request "+ Msg.get(0) +" failed";
+                this.connections.send(this.connectionId, errorinfo);
                 break;
 
         }//end of switch-case
@@ -160,7 +175,6 @@ public class normalUserRequestSystem extends BidiConnectionImple {
         String toReturn = "";
         toReturn = toReturn.concat("\"" + tmp.getName() +"\"");
         toReturn = toReturn.concat(" " + tmp.getAvailableAmount());
-        toReturn = toReturn.concat(" " + tmp.getTotalAmount());
         toReturn = toReturn.concat(" " + tmp.getPrice());
         for (String banned : tmp.getBannedCountries()) {
             toReturn = toReturn.concat(" \"" + banned + "\"");
